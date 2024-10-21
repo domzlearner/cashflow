@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+<div class="grid grid-cols-3 gap-4 mb-8">
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">Income</h2>
+        <p class="text-2xl text-green-600">${{ income }}</p>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">Expenses</h2>
+        <p class="text-2xl text-red-600">${{ expenses }}</p>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">Balance</h2>
+        <p class="text-2xl {% if balance >= 0 %}text-green-600{% else %}text-red-600{% endif %}">
+            ${{ balance }}
+        </p>
+    </div>
+</div>
+<h2 class="text-2xl font-bold mb-4">Recent Transactions</h2>
+<table class="w-full bg-white rounded shadow">
+    <thead>
+        <tr class="bg-gray-200">
+            <th class="p-2 text-left">Date</th>
+            <th class="p-2 text-left">Description</th>
+            <th class="p-2 text-left">Type</th>
+            <th class="p-2 text-right">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td class="p-2">{{ transaction.date }}</td>
+            <td class="p-2">{{ transaction.description }}</td>
+            <td class="p-2">{{ transaction.transaction_type|capfirst }}</td>
+            <td class="p-2 text-right {% if transaction.transaction_type == 'income' %}text-green-600{% else %}text-red-600{% endif %}">
+                ${{ transaction.amount }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
