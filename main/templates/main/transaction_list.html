@@ -8,6 +8,7 @@
             <th class="p-2 text-left">Date</th>
             <th class="p-2 text-left">Description</th>
             <th class="p-2 text-left">Type</th>
+            <th class="p-2 text-left">Category</th>
             <th class="p-2 text-right">Amount</th>
         </tr>
     </thead>
@@ -17,6 +18,7 @@
             <td class="p-2">{{ transaction.date }}</td>
             <td class="p-2">{{ transaction.description }}</td>
             <td class="p-2">{{ transaction.transaction_type|capfirst }}</td>
+            <td class="p-2">{{ transaction.expense_category|default:"-"|capfirst }}</td>
             <td class="p-2 text-right {% if transaction.transaction_type == 'income' %}text-green-600{% else %}text-red-600{% endif %}">
                 ${{ transaction.amount }}
             </td>

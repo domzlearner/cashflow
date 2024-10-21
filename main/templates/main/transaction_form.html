@@ -5,7 +5,7 @@
 <form method="post" class="bg-white p-6 rounded shadow">
     {% csrf_token %}
     {% for field in form %}
-    <div class="mb-4">
+    <div class="mb-4 {% if field.name == 'expense_category' %}hidden{% endif %}" id="{{ field.name }}_field">
         <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
             {{ field.label }}
         </label>
@@ -19,4 +19,22 @@
         Add Transaction
     </button>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const transactionTypeField = document.getElementById('id_transaction_type');
+        const expenseCategoryField = document.getElementById('expense_category_field');
+
+        function toggleExpenseCategory() {
+            if (transactionTypeField.value === 'expense') {
+                expenseCategoryField.classList.remove('hidden');
+            } else {
+                expenseCategoryField.classList.add('hidden');
+            }
+        }
+
+        transactionTypeField.addEventListener('change', toggleExpenseCategory);
+        toggleExpenseCategory();
+    });
+</script>
 {% endblock %}
