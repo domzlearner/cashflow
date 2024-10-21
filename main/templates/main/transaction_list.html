@@ -1,3 +1,4 @@
+
 {% extends 'main/base.html' %}
 
 {% block content %}
@@ -10,6 +11,7 @@
             <th>Type</th>
             <th>Category</th>
             <th>Amount</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -21,6 +23,10 @@
             <td>{{ transaction.expense_category|default:"-"|capfirst }}</td>
             <td class="{% if transaction.transaction_type == 'income' %}text-green{% else %}text-red{% endif %}">
                 ${{ transaction.amount }}
+            </td>
+            <td>
+                <a href="{% url 'transaction_update' transaction.id %}" class="btn btn-small">Edit</a>
+                <a href="{% url 'transaction_delete' transaction.id %}" class="btn btn-small btn-danger">Delete</a>
             </td>
         </tr>
         {% endfor %}

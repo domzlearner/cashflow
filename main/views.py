@@ -1,5 +1,5 @@
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.db.models import Sum
 from .models import Transaction
@@ -15,6 +15,7 @@ class DashboardView(View):
             'bills': Transaction.objects.filter(transaction_type='expense', expense_category='bills').aggregate(Sum('amount'))['amount__sum'] or 0,
             'savings': Transaction.objects.filter(transaction_type='expense', expense_category='savings').aggregate(Sum('amount'))['amount__sum'] or 0,
             'debts': Transaction.objects.filter(transaction_type='expense', expense_category='debts').aggregate(Sum('amount'))['amount__sum'] or 0,
+            'others': Transaction.objects.filter(transaction_type='expense', expense_category='others').aggregate(Sum('amount'))['amount__sum'] or 0,
         }
 
         transactions = Transaction.objects.all().order_by('-date')[:10]
@@ -44,3 +45,27 @@ class TransactionCreateView(View):
             form.save()
             return redirect('transaction_list')
         return render(request, 'main/transaction_form.html', {'form': form})
+    
+class TransactionUpdateView(View):
+    def get(self, request, pk):
+        transaction = get_object_or_404(Transaction, pk=pk)
+        form = TransactionForm(instance=transaction)
+        return render(request, 'main/transaction_form.html', {'form': form, 'transaction': transaction})
+
+    def post(self, request, pk):
+        transaction = get_object_or_404(Transaction, pk=pk)
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            form.save()
+            return redirect('transaction_list')
+        return render(request, 'main/transaction_form.html', {'form': form, 'transaction': transaction})
+
+class TransactionDeleteView(View):
+    def get(self, request, pk):
+        transaction = get_object_or_404(Transaction, pk=pk)
+        return render(request, 'main/transaction_confirm_delete.html', {'transaction': transaction})
+
+    def post(self, request, pk):
+        transaction = get_object_or_404(Transaction, pk=pk)
+        transaction.delete()
+        return redirect('transaction_list')

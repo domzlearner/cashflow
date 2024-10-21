@@ -11,6 +11,7 @@ class Transaction(models.Model):
         ('bills', 'Bills'),
         ('savings', 'Savings'),
         ('debts', 'Debts'),
+        ('others', 'Others'),
     )
 
     amount = models.DecimalField(max_digits=10, decimal_places=2)

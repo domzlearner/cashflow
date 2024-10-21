@@ -1,3 +1,4 @@
+
 {% extends 'main/base.html' %}
 
 {% block content %}
@@ -19,7 +20,7 @@
     </div>
 </div>
 <h2>Expense Categories</h2>
-<div class="grid grid-cols-3">
+<div class="grid grid-cols-4">
     <div class="card">
         <h2>Bills</h2>
         <p class="text-red">${{ expense_categories.bills }}</p>
@@ -32,6 +33,10 @@
         <h2>Debts</h2>
         <p class="text-orange">${{ expense_categories.debts }}</p>
     </div>
+    <div class="card">
+        <h2>Others</h2>
+        <p class="text-purple">${{ expense_categories.others }}</p>
+    </div>
 </div>
 <h2>Recent Transactions</h2>
 <table>
@@ -42,6 +47,7 @@
             <th>Type</th>
             <th>Category</th>
             <th>Amount</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -53,6 +59,10 @@
             <td>{{ transaction.expense_category|default:"-"|capfirst }}</td>
             <td class="{% if transaction.transaction_type == 'income' %}text-green{% else %}text-red{% endif %}">
                 ${{ transaction.amount }}
+            </td>
+            <td>
+                <a href="{% url 'transaction_update' transaction.id %}" class="btn btn-small">Edit</a>
+                <a href="{% url 'transaction_delete' transaction.id %}" class="btn btn-small btn-danger">Delete</a>
             </td>
         </tr>
         {% endfor %}
