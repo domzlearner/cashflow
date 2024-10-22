@@ -1,35 +1,62 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-<h1>Add Transaction</h1>
-<form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-    <div class="{% if field.name == 'expense_category' %}hidden{% endif %}" id="{{ field.name }}_field">
-        <label for="{{ field.id_for_label }}">
-            {{ field.label }}
-        </label>
-        {{ field }}
-        {% if field.errors %}
-        <p class="text-red">{{ field.errors.0 }}</p>
-        {% endif %}
-    </div>
-    {% endfor %}
-    <button type="submit">
-        Add Transaction
-    </button>
-</form>
+<div class="form-container">
+    <h1 class="form-title">{% if form.instance.pk %}Edit Transaction{% else %}Add Transaction{% endif %}</h1>
+    <form method="post" class="transaction-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.amount.id_for_label }}">Amount</label>
+            {{ form.amount }}
+            {% if form.amount.errors %}
+            <p class="error-message">{{ form.amount.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description }}
+            {% if form.description.errors %}
+            <p class="error-message">{{ form.description.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.date.id_for_label }}">Date</label>
+            {{ form.date }}
+            {% if form.date.errors %}
+            <p class="error-message">{{ form.date.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.transaction_type.id_for_label }}">Transaction Type</label>
+            {{ form.transaction_type }}
+            {% if form.transaction_type.errors %}
+            <p class="error-message">{{ form.transaction_type.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div class="form-group" id="expense_category_group">
+            <label for="{{ form.expense_category.id_for_label }}">Expense Category</label>
+            {{ form.expense_category }}
+            {% if form.expense_category.errors %}
+            <p class="error-message">{{ form.expense_category.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}Add{% endif %} Transaction</button>
+            <a href="{% url 'transaction_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const transactionTypeField = document.getElementById('id_transaction_type');
-        const expenseCategoryField = document.getElementById('expense_category_field');
+        const transactionTypeField = document.getElementById('{{ form.transaction_type.id_for_label }}');
+        const expenseCategoryGroup = document.getElementById('expense_category_group');
 
         function toggleExpenseCategory() {
             if (transactionTypeField.value === 'expense') {
-                expenseCategoryField.classList.remove('hidden');
+                expenseCategoryGroup.style.display = 'block';
             } else {
-                expenseCategoryField.classList.add('hidden');
+                expenseCategoryGroup.style.display = 'none';
             }
         }
 
