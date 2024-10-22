@@ -1,44 +1,42 @@
 
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block content %}
 <h1>Dashboard</h1>
-<div class="grid grid-cols-3">
+<div class="dashboard-grid">
     <div class="card">
-        <h2>Income</h2>
-        <p class="text-green">${{ income }}</p>
+        <div class="card-content">
+            <h2>Income</h2>
+            <p class="amount text-green">${{ income }}</p>
+            <div class="chart-container">
+                {% include "main/income_chart.html" with chart_id="income-chart" %}
+            </div>
+        </div>
     </div>
     <div class="card">
-        <h2>Expenses</h2>
-        <p class="text-red">${{ expenses }}</p>
+        <div class="card-content">
+            <h2>Expenses</h2>
+            <p class="amount text-red">${{ expenses }}</p>
+            <div class="chart-container">
+                {% include "main/expense_chart.html" with chart_id="expense-chart" %}
+            </div>
+        </div>
     </div>
     <div class="card">
-        <h2>Balance</h2>
-        <p class="{% if balance >= 0 %}text-green{% else %}text-red{% endif %}">
-            ${{ balance }}
-        </p>
-    </div>
-</div>
-<h2>Expense Categories</h2>
-<div class="grid grid-cols-4">
-    <div class="card">
-        <h2>Bills</h2>
-        <p class="text-red">${{ expense_categories.bills }}</p>
-    </div>
-    <div class="card">
-        <h2>Savings</h2>
-        <p class="text-blue">${{ expense_categories.savings }}</p>
-    </div>
-    <div class="card">
-        <h2>Debts</h2>
-        <p class="text-orange">${{ expense_categories.debts }}</p>
-    </div>
-    <div class="card">
-        <h2>Others</h2>
-        <p class="text-purple">${{ expense_categories.others }}</p>
+        <div class="card-content">
+            <h2>Balance</h2>
+            <p class="amount {% if balance >= 0 %}text-green{% else %}text-red{% endif %}">
+                ${{ balance }}
+            </p>
+            <div class="chart-container">
+                {% include "main/balance_chart.html" with chart_id="balance-chart" %}
+            </div>
+        </div>
     </div>
 </div>
-<h2>Recent Transactions</h2>
+
+<h2 class="section-title">Recent Transactions</h2>
 <table>
     <thead>
         <tr>
@@ -68,4 +66,5 @@
         {% endfor %}
     </tbody>
 </table>
+
 {% endblock %}

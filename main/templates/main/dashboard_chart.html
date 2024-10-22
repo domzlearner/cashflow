@@ -1,0 +1,54 @@
+
+<div id="income-chart" class="h-64"></div>
+<div id="expense-chart" class="h-64"></div>
+<div id="balance-chart" class="h-64"></div>
+
+<script>
+    // Income Breakdown Chart
+    var incomeData = JSON.parse('{{ income_breakdown|escapejs }}');
+    var incomeOptions = {
+        series: incomeData.map(item => parseFloat(item.total)),
+        labels: incomeData.map(item => item.description),
+        chart: {
+            type: 'donut',
+            height: 250
+        },
+        title: {
+            // text: 'Income Breakdown'
+        }
+    };
+    var incomeChart = new ApexCharts(document.querySelector("#income-chart"), incomeOptions);
+    incomeChart.render();
+
+    // Expense Categories Chart
+    var expenseData = JSON.parse('{{ expense_categories|escapejs }}');
+    var expenseOptions = {
+        series: expenseData.map(item => parseFloat(item.total)),
+        labels: expenseData.map(item => item.expense_category),
+        chart: {
+            type: 'donut',
+            height: 250
+        },
+        title: {
+            // text: 'Expense Categories'
+        }
+    };
+    var expenseChart = new ApexCharts(document.querySelector("#expense-chart"), expenseOptions);
+    expenseChart.render();
+
+    // Income vs Expense Chart
+    var balanceData = JSON.parse('{{ income_vs_expense|escapejs }}');
+    var balanceOptions = {
+        series: balanceData.map(item => parseFloat(item.value)),
+        labels: balanceData.map(item => item.name),
+        chart: {
+            type: 'donut',
+            height: 250
+        },
+        title: {
+            // text: 'Income vs Expense'
+        }
+    };
+    var balanceChart = new ApexCharts(document.querySelector("#balance-chart"), balanceOptions);
+    balanceChart.render();
+</script>

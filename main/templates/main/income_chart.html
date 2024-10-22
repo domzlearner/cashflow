@@ -1,0 +1,19 @@
+<div id="income-chart"></div>
+
+<script>
+    // Income Breakdown Chart
+    var incomeData = JSON.parse('{{ income_breakdown|escapejs }}');
+    var incomeOptions = {
+        series: incomeData.map(item => parseFloat(item.total)),
+        labels: incomeData.map(item => item.description),
+        chart: {
+            type: 'donut',
+            height: 250
+        },
+        title: {
+            // text: 'Income Breakdown'
+        }
+    };
+    var incomeChart = new ApexCharts(document.querySelector("#income-chart"), incomeOptions);
+    incomeChart.render();
+</script>

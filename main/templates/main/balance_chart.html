@@ -1,0 +1,19 @@
+<div id="balance-chart"></div>
+
+<script>
+// Income vs Expense Chart
+var balanceData = JSON.parse('{{ income_vs_expense|escapejs }}');
+    var balanceOptions = {
+        series: balanceData.map(item => parseFloat(item.value)),
+        labels: balanceData.map(item => item.name),
+        chart: {
+            type: 'donut',
+            height: 250
+        },
+        title: {
+            // text: 'Income vs Expense'
+        }
+    };
+    var balanceChart = new ApexCharts(document.querySelector("#balance-chart"), balanceOptions);
+    balanceChart.render();
+</script>

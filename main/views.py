@@ -4,6 +4,8 @@ from django.views import View
 from django.db.models import Sum
 from .models import Transaction
 from .forms import TransactionForm
+import json
+from decimal import Decimal
 
 class DashboardView(View):
     def get(self, request):
@@ -18,13 +20,37 @@ class DashboardView(View):
             'others': Transaction.objects.filter(transaction_type='expense', expense_category='others').aggregate(Sum('amount'))['amount__sum'] or 0,
         }
 
+        # Income breakdown
+        income_breakdown = list(Transaction.objects.filter(transaction_type='income')
+                                .values('description')
+                                .annotate(total=Sum('amount'))
+                                .order_by('-total'))
+
+        # Expense categories breakdown
+        expense_categories = list(Transaction.objects.filter(transaction_type='expense')
+                                  .values('expense_category')
+                                  .annotate(total=Sum('amount'))
+                                  .order_by('-total'))
+
+        # Income vs Expense breakdown
+        income_vs_expense = [
+            {'name': 'Income', 'value': float(income)},
+            {'name': 'Expense', 'value': float(expenses)},
+        ]
+
         transactions = Transaction.objects.all().order_by('-date')[:10]
         
+        # Convert Decimal to float for JSON serialization
+        for item in income_breakdown + expense_categories:
+            item['total'] = float(item['total'])
+
         context = {
             'income': income,
             'expenses': expenses,
             'balance': balance,
-            'expense_categories': expense_categories,
+            'income_breakdown': json.dumps(income_breakdown),
+            'expense_categories': json.dumps(expense_categories),
+            'income_vs_expense': json.dumps(income_vs_expense),
             'transactions': transactions,
         }
         return render(request, 'main/dashboard.html', context)

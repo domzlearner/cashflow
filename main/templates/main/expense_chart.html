@@ -1,0 +1,19 @@
+<div id="expense-chart"></div>
+
+<script>
+    // Expense Categories Chart
+    var expenseData = JSON.parse('{{ expense_categories|escapejs }}');
+    var expenseOptions = {
+        series: expenseData.map(item => parseFloat(item.total)),
+        labels: expenseData.map(item => item.expense_category),
+        chart: {
+            type: 'donut',
+            height: 250
+        },
+        title: {
+            // text: 'Expense Categories'
+        }
+    };
+    var expenseChart = new ApexCharts(document.querySelector("#expense-chart"), expenseOptions);
+    expenseChart.render();
+</script>
