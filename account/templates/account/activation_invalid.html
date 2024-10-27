@@ -1,0 +1,16 @@
+
+{% extends 'account/base.html' %}
+
+{% block title %}Activation Invalid{% endblock %}
+
+{% block content %}
+<div class="message-container">
+    <h1 class="message-title">Activation Invalid</h1>
+    <p class="message-content">
+        The confirmation link was invalid, possibly because it has already been used or has expired.
+    </p>
+    <div class="form-links">
+        <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up Again</a>
+    </div>
+</div>
+{% endblock %}

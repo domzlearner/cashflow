@@ -1,13 +1,17 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from .models import Transaction
 from .forms import TransactionForm
 import json
 from decimal import Decimal
 
-class DashboardView(View):
+class DashboardView(LoginRequiredMixin, View):
+    login_url = '/account/signin/'
+    redirect_field_name = 'next'
+
     def get(self, request):
         income = Transaction.objects.filter(transaction_type='income').aggregate(Sum('amount'))['amount__sum'] or 0
         expenses = Transaction.objects.filter(transaction_type='expense').aggregate(Sum('amount'))['amount__sum'] or 0

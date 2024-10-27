@@ -8,7 +8,7 @@ var balanceData = JSON.parse('{{ income_vs_expense|escapejs }}');
         labels: balanceData.map(item => item.name),
         chart: {
             type: 'donut',
-            height: 250
+            height: 240
         },
         title: {
             // text: 'Income vs Expense'

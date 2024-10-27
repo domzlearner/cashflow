@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'account.CustomUser'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' 
+# LOGIN_URL = '/account/signin/'
